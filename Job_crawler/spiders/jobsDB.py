@@ -2,13 +2,6 @@ import scrapy
 import json
 import urllib.parse as urlparse
 
-
-class Job(scrapy.Item):
-    title = scrapy.Field()
-    link = scrapy.Field()
-    company = scrapy.Field()
-
-
 class JobSpider(scrapy.Spider):
     name = "jobsDB"
     allowed_domains = ['hk.jobsdb.com', 'xapi.supercharge-srp.co']
@@ -30,6 +23,7 @@ class JobSpider(scrapy.Spider):
         "TE": "Trailers"
     }
     # Default Settings
+    current = 0
     limit = 100
     category = "information-technology"
     # keywords = "Python"
@@ -85,7 +79,7 @@ class JobSpider(scrapy.Spider):
     #     self.jobs["keywords"] += keyword_dict
 
     def get_job_by_API(self, response):
+        self.current += 1
         data = json.loads(response.text)
         jobDetail = data["data"]["jobDetail"]
         print(jobDetail)
-
